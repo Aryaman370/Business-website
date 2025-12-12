@@ -113,13 +113,19 @@ function calculateEstimate() {
         } else {
             basePrice = 25000;
         }
-        basePrice += (numPages - 5) * 1000; // Additional pages
+        if (numPages > 5) {
+            basePrice += (numPages - 5) * 1000; // Additional pages
+        }
     } else if (projectType === 'app') {
         basePrice = 30000;
-        basePrice += (numPages - 5) * 2000; // Additional screens
+        if (numPages > 5) {
+            basePrice += (numPages - 5) * 2000; // Additional screens
+        }
     } else if (projectType === 'both') {
         basePrice = 50000;
-        basePrice += (numPages - 5) * 1500;
+        if (numPages > 5) {
+            basePrice += (numPages - 5) * 1500;
+        }
     }
 
     // Add feature costs
@@ -146,10 +152,17 @@ function getAIRecommendation() {
     const resultDiv = document.getElementById('aiRecommendation');
 
     if (!businessType || !businessGoal) {
-        resultDiv.innerHTML = '<p class="text-danger">Please fill in all fields to get a recommendation.</p>';
+        resultDiv.textContent = '';
+        const errorP = document.createElement('p');
+        errorP.className = 'text-danger';
+        errorP.textContent = 'Please fill in all fields to get a recommendation.';
+        resultDiv.appendChild(errorP);
         resultDiv.classList.add('show');
         return;
     }
+
+    // Sanitize user input
+    const sanitizedBusinessType = businessType.replace(/[<>]/g, '');
 
     // Simulate AI processing
     resultDiv.innerHTML = '<p><i class="fas fa-spinner fa-spin me-2"></i>Analyzing your requirements...</p>';
@@ -162,51 +175,83 @@ function getAIRecommendation() {
 
         // AI logic based on inputs
         if (businessGoal === 'showcase') {
-            if (businessType.toLowerCase().includes('restaurant') || businessType.toLowerCase().includes('food')) {
-                recommendation = `For a ${businessType}, we recommend a visually stunning Portfolio Website with an image gallery to showcase your menu and ambiance.`;
+            if (sanitizedBusinessType.toLowerCase().includes('restaurant') || sanitizedBusinessType.toLowerCase().includes('food')) {
+                recommendation = `For a ${sanitizedBusinessType}, we recommend a visually stunning Portfolio Website with an image gallery to showcase your menu and ambiance.`;
                 suggestedPackage = 'Portfolio Website (₹10,000)';
                 features = ['Image Gallery', 'Menu Display', 'Reservation System', 'Location Map'];
             } else {
-                recommendation = `A Portfolio Website would be perfect for showcasing your ${businessType}. It will help display your work, services, and achievements professionally.`;
+                recommendation = `A Portfolio Website would be perfect for showcasing your ${sanitizedBusinessType}. It will help display your work, services, and achievements professionally.`;
                 suggestedPackage = 'Portfolio Website (₹10,000)';
                 features = ['Professional Design', 'Portfolio Gallery', 'About Section', 'Contact Form'];
             }
         } else if (businessGoal === 'sell') {
-            recommendation = `To sell products online for your ${businessType}, we recommend a Small Business Website with e-commerce capabilities.`;
+            recommendation = `To sell products online for your ${sanitizedBusinessType}, we recommend a Small Business Website with e-commerce capabilities.`;
             suggestedPackage = 'Small Business Website (₹25,000)';
             features = ['Product Catalog', 'Shopping Cart', 'Payment Gateway', 'Order Management', 'Customer Accounts'];
         } else if (businessGoal === 'leads') {
-            recommendation = `For lead generation in ${businessType}, a Basic Website with strong call-to-action elements and contact forms would be ideal.`;
+            recommendation = `For lead generation in ${sanitizedBusinessType}, a Basic Website with strong call-to-action elements and contact forms would be ideal.`;
             suggestedPackage = 'Basic Website (₹5,000) with lead capture features';
             features = ['Contact Forms', 'Call-to-Action Buttons', 'Service Showcase', 'Testimonials'];
         } else if (businessGoal === 'engagement') {
-            recommendation = `To improve customer engagement for ${businessType}, consider our AI-Powered solutions with chatbot integration and a Business App.`;
+            recommendation = `To improve customer engagement for ${sanitizedBusinessType}, consider our AI-Powered solutions with chatbot integration and a Business App.`;
             suggestedPackage = 'Business App (₹40,000) + AI Chatbot';
             features = ['AI Chatbot', 'Push Notifications', 'Customer Dashboard', 'Interactive Features', 'Analytics'];
         }
 
-        const resultHTML = `
-            <div class="ai-recommendation-result">
-                <h5><i class="fas fa-lightbulb text-warning me-2"></i>AI Recommendation</h5>
-                <p><strong>${recommendation}</strong></p>
-                <div class="mt-3">
-                    <h6>Suggested Package:</h6>
-                    <p class="text-primary fw-bold">${suggestedPackage}</p>
-                </div>
-                <div class="mt-3">
-                    <h6>Recommended Features:</h6>
-                    <ul class="list-unstyled">
-                        ${features.map(f => `<li><i class="fas fa-check-circle text-success me-2"></i>${f}</li>`).join('')}
-                    </ul>
-                </div>
-                <div class="mt-3">
-                    <a href="#contact" class="btn btn-primary btn-sm">Request Custom Quote</a>
-                </div>
-            </div>
-        `;
-
-        resultDiv.innerHTML = resultHTML;
+        // Create result using DOM manipulation to prevent XSS
+        resultDiv.textContent = '';
+        const resultContainer = document.createElement('div');
+        resultContainer.className = 'ai-recommendation-result';
+        
+        const title = document.createElement('h5');
+        title.innerHTML = '<i class="fas fa-lightbulb text-warning me-2"></i>AI Recommendation';
+        resultContainer.appendChild(title);
+        
+        const recText = document.createElement('p');
+        const recStrong = document.createElement('strong');
+        recStrong.textContent = recommendation;
+        recText.appendChild(recStrong);
+        resultContainer.appendChild(recText);
+        
+        const packageDiv = document.createElement('div');
+        packageDiv.className = 'mt-3';
+        const packageTitle = document.createElement('h6');
+        packageTitle.textContent = 'Suggested Package:';
+        const packageText = document.createElement('p');
+        packageText.className = 'text-primary fw-bold';
+        packageText.textContent = suggestedPackage;
+        packageDiv.appendChild(packageTitle);
+        packageDiv.appendChild(packageText);
+        resultContainer.appendChild(packageDiv);
+        
+        const featuresDiv = document.createElement('div');
+        featuresDiv.className = 'mt-3';
+        const featuresTitle = document.createElement('h6');
+        featuresTitle.textContent = 'Recommended Features:';
+        const featuresList = document.createElement('ul');
+        featuresList.className = 'list-unstyled';
+        features.forEach(f => {
+            const li = document.createElement('li');
+            li.innerHTML = `<i class="fas fa-check-circle text-success me-2"></i>`;
+            li.appendChild(document.createTextNode(f));
+            featuresList.appendChild(li);
+        });
+        featuresDiv.appendChild(featuresTitle);
+        featuresDiv.appendChild(featuresList);
+        resultContainer.appendChild(featuresDiv);
+        
+        const ctaDiv = document.createElement('div');
+        ctaDiv.className = 'mt-3';
+        const ctaLink = document.createElement('a');
+        ctaLink.href = '#contact';
+        ctaLink.className = 'btn btn-primary btn-sm';
+        ctaLink.textContent = 'Request Custom Quote';
+        ctaDiv.appendChild(ctaLink);
+        resultContainer.appendChild(ctaDiv);
+        
+        resultDiv.appendChild(resultContainer);
     }, 2000);
+}
 }
 
 // Contact Form Handler
@@ -249,9 +294,13 @@ if (contactForm) {
 
 function showFormMessage(message, type) {
     const formMessage = document.getElementById('formMessage');
-    formMessage.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+    formMessage.textContent = '';
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert alert-${type}`;
+    alertDiv.textContent = message;
+    formMessage.appendChild(alertDiv);
     setTimeout(() => {
-        formMessage.innerHTML = '';
+        formMessage.textContent = '';
     }, 5000);
 }
 
@@ -335,14 +384,28 @@ newsletterForms.forEach(form => {
     form.addEventListener('submit', function (e) {
         e.preventDefault();
         const email = this.querySelector('input[type="email"]').value;
+        const submitBtn = this.querySelector('button[type="submit"]');
 
         if (!isValidEmail(email)) {
-            alert('Please enter a valid email address.');
+            // Create temporary error message
+            const errorMsg = document.createElement('small');
+            errorMsg.className = 'text-danger d-block mt-2';
+            errorMsg.textContent = 'Please enter a valid email address.';
+            this.appendChild(errorMsg);
+            setTimeout(() => errorMsg.remove(), 3000);
             return;
         }
 
-        alert('Thank you for subscribing! You will receive our latest updates and offers.');
-        this.reset();
+        // Show success message
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Subscribed!';
+        submitBtn.disabled = true;
+        
+        setTimeout(() => {
+            this.reset();
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+        }, 2000);
     });
 });
 
