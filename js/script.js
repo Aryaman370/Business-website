@@ -252,7 +252,6 @@ function getAIRecommendation() {
         resultDiv.appendChild(resultContainer);
     }, 2000);
 }
-}
 
 // Contact Form Handler
 const contactForm = document.getElementById('contactForm');
