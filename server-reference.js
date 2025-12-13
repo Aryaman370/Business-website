@@ -100,15 +100,15 @@ function createServer() {
                 }
             ];
 
-            // Call OpenAI API
-            const completion = await openai.createChatCompletion({
+            // Call OpenAI API (SDK v4.x)
+            const completion = await openai.chat.completions.create({
                 model: 'gpt-3.5-turbo',
                 messages,
                 max_tokens: 500,
                 temperature: 0.7,
             });
 
-            const aiResponse = completion.data.choices[0].message.content;
+            const aiResponse = completion.choices[0].message.content;
 
             // Update session history
             session.history.push({ message, sender: 'user', timestamp: Date.now() });

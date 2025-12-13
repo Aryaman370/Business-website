@@ -410,8 +410,14 @@ function addMessageToUI(message, sender) {
     messageDiv.className = sender === 'user' ? 'user-message' : 'bot-message';
     
     const messagePara = document.createElement('p');
-    // Use textContent to prevent XSS
-    messagePara.textContent = message;
+    // Format message while preventing XSS - preserve line breaks
+    const lines = message.split('\n');
+    lines.forEach((line, index) => {
+        if (index > 0) {
+            messagePara.appendChild(document.createElement('br'));
+        }
+        messagePara.appendChild(document.createTextNode(line));
+    });
     messageDiv.appendChild(messagePara);
     
     // Add timestamp
@@ -429,7 +435,13 @@ function showTypingIndicator() {
     const typingDiv = document.createElement('div');
     typingDiv.className = 'typing-indicator';
     typingDiv.id = 'typingIndicator';
-    typingDiv.innerHTML = '<span></span><span></span><span></span>';
+    
+    // Create spans safely without innerHTML
+    for (let i = 0; i < 3; i++) {
+        const span = document.createElement('span');
+        typingDiv.appendChild(span);
+    }
+    
     chatMessages.appendChild(typingDiv);
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
