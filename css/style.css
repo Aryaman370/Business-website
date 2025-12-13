@@ -127,6 +127,13 @@ html {
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
+.hero-buttons {
+    display: flex;
+    gap: 1cm;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
 .hero-buttons .btn {
     padding: 15px 40px;
     font-size: 1.1rem;
@@ -768,6 +775,11 @@ html {
 }
 
 @media (max-width: 576px) {
+    .hero-buttons {
+        gap: 0;
+        flex-direction: column;
+    }
+
     .hero-buttons .btn {
         display: block;
         width: 100%;
