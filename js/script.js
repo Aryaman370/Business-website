@@ -308,74 +308,9 @@ function isValidEmail(email) {
     return emailRegex.test(email);
 }
 
-// Chatbot Functionality
-let chatbotOpen = false;
-
-function toggleChat() {
-    chatbotOpen = !chatbotOpen;
-    const chatbotBody = document.getElementById('chatbotBody');
-    chatbotBody.classList.toggle('active');
-}
-
-function sendMessage() {
-    const chatInput = document.getElementById('chatInput');
-    const message = chatInput.value.trim();
-
-    if (!message) return;
-
-    // Add user message
-    addMessageToChat(message, 'user');
-    chatInput.value = '';
-
-    // Simulate AI response
-    setTimeout(() => {
-        const response = getAIResponse(message);
-        addMessageToChat(response, 'bot');
-    }, 1000);
-}
-
-function addMessageToChat(message, sender) {
-    const chatMessages = document.getElementById('chatMessages');
-    const messageDiv = document.createElement('div');
-    messageDiv.className = sender === 'user' ? 'user-message' : 'bot-message';
-    messageDiv.innerHTML = `<p>${message}</p>`;
-    chatMessages.appendChild(messageDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-}
-
-function getAIResponse(message) {
-    const lowerMessage = message.toLowerCase();
-
-    if (lowerMessage.includes('price') || lowerMessage.includes('cost')) {
-        return "Our pricing starts from ₹5,000 for basic websites. You can check our detailed pricing in the Pricing section or use our Cost Estimator tool for a custom quote!";
-    } else if (lowerMessage.includes('website')) {
-        return "We offer comprehensive website development services including Portfolio sites, Business websites, and E-commerce platforms. What type of website are you interested in?";
-    } else if (lowerMessage.includes('app')) {
-        return "We develop mobile apps for both iOS and Android platforms. Our packages range from ₹30,000 to ₹50,000 depending on features. Would you like to know more?";
-    } else if (lowerMessage.includes('ai')) {
-        return "We integrate AI features like chatbots, recommendation engines, and smart analytics into your projects. This can enhance user engagement significantly!";
-    } else if (lowerMessage.includes('time') || lowerMessage.includes('duration')) {
-        return "Our typical turnaround time is 5-7 days for basic projects, and 2-4 weeks for complex applications. We also offer rush delivery options!";
-    } else if (lowerMessage.includes('contact') || lowerMessage.includes('reach')) {
-        return "You can reach us at info@aisolutions.com or call us at +91 98765 43210. You can also fill out the contact form below!";
-    } else if (lowerMessage.includes('hi') || lowerMessage.includes('hello') || lowerMessage.includes('hey')) {
-        return "Hello! 👋 How can I help you today? Feel free to ask about our services, pricing, or anything else!";
-    } else if (lowerMessage.includes('thank')) {
-        return "You're welcome! If you have any other questions, feel free to ask. We're here to help! 😊";
-    } else {
-        return "That's a great question! For detailed information, please check our Services and Pricing sections, or you can contact us directly using the form below. Is there anything specific you'd like to know?";
-    }
-}
-
-// Allow Enter key to send message
-const chatInput = document.getElementById('chatInput');
-if (chatInput) {
-    chatInput.addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') {
-            sendMessage();
-        }
-    });
-}
+// Chatbot Functionality - Now handled by chatbot.js
+// Keeping this section for backward compatibility
+// The enhanced chatbot is loaded from js/chatbot.js
 
 // Newsletter Form Handler
 const newsletterForms = document.querySelectorAll('.newsletter-form');
