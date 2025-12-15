@@ -256,8 +256,16 @@ function getAIRecommendation() {
 // Contact Form Handler with Live Validation
 const contactForm = document.getElementById('contactForm');
 const contactName = document.getElementById('contactName');
-const contactEmail = document.getElementById('contactEmail');
+const contactEmail = document.getElementById('contactMessage');
 const contactMessage = document.getElementById('contactMessage');
+
+// Configuration constants
+const CONTACT_EMAIL = 'aryaman@gmail.com';
+const NAME_VALIDATION_PATTERN = /^[a-zA-Z\s]+$/;
+const MIN_NAME_LENGTH = 2;
+const MAX_NAME_LENGTH = 100;
+const MIN_MESSAGE_LENGTH = 10;
+const MAX_MESSAGE_LENGTH = 1000;
 
 // Character counter for message
 if (contactMessage) {
@@ -302,12 +310,12 @@ if (contactName) {
         if (this.value.length === 0) {
             this.classList.remove('is-valid', 'is-invalid');
             nameError.classList.remove('show');
-        } else if (this.value.length < 2) {
+        } else if (this.value.length < MIN_NAME_LENGTH) {
             this.classList.remove('is-valid');
             this.classList.add('is-invalid');
-            nameError.textContent = 'Name must be at least 2 characters long';
+            nameError.textContent = `Name must be at least ${MIN_NAME_LENGTH} characters long`;
             nameError.classList.add('show');
-        } else if (!/^[a-zA-Z\s]+$/.test(this.value)) {
+        } else if (!NAME_VALIDATION_PATTERN.test(this.value)) {
             this.classList.remove('is-valid');
             this.classList.add('is-invalid');
             nameError.textContent = 'Name can only contain letters and spaces';
@@ -336,8 +344,8 @@ if (contactForm) {
             return;
         }
 
-        if (name.length < 2 || !/^[a-zA-Z\s]+$/.test(name)) {
-            showFormMessage('Please enter a valid name (letters and spaces only, minimum 2 characters).', 'danger', 'fas fa-exclamation-circle');
+        if (name.length < MIN_NAME_LENGTH || name.length > MAX_NAME_LENGTH || !NAME_VALIDATION_PATTERN.test(name)) {
+            showFormMessage(`Please enter a valid name (letters and spaces only, ${MIN_NAME_LENGTH}-${MAX_NAME_LENGTH} characters).`, 'danger', 'fas fa-exclamation-circle');
             return;
         }
 
@@ -346,8 +354,8 @@ if (contactForm) {
             return;
         }
 
-        if (message.length < 10) {
-            showFormMessage('Message must be at least 10 characters long.', 'danger', 'fas fa-exclamation-circle');
+        if (message.length < MIN_MESSAGE_LENGTH || message.length > MAX_MESSAGE_LENGTH) {
+            showFormMessage(`Message must be between ${MIN_MESSAGE_LENGTH} and ${MAX_MESSAGE_LENGTH} characters long.`, 'danger', 'fas fa-exclamation-circle');
             return;
         }
 
@@ -360,13 +368,13 @@ if (contactForm) {
         submitBtn.disabled = true;
 
         try {
-            // Prepare form data
+            // Prepare form data (sanitization happens on server)
             const formData = {
-                name: sanitizeInput(name),
-                email: sanitizeInput(email),
-                phone: sanitizeInput(phone),
+                name: name,
+                email: email,
+                phone: phone,
                 inquiryType: inquiryType || 'general',
-                message: sanitizeInput(message),
+                message: message,
                 timestamp: new Date().toISOString()
             };
 
@@ -391,7 +399,7 @@ if (contactForm) {
         } catch (error) {
             console.error('Contact form error:', error);
             showFormMessage(
-                'There was an error sending your message. Please try again or contact us directly at aryaman@gmail.com.',
+                `There was an error sending your message. Please try again or contact us directly at ${CONTACT_EMAIL}.`,
                 'danger',
                 'fas fa-exclamation-triangle'
             );
@@ -450,13 +458,6 @@ async function sendViaEmailJS(formData) {
         console.error('EmailJS error:', error);
         return { success: false, error: error.message };
     }
-}
-
-// Sanitize user input to prevent XSS
-function sanitizeInput(input) {
-    const div = document.createElement('div');
-    div.textContent = input;
-    return div.innerHTML;
 }
 
 function showFormMessage(message, type, icon = '') {

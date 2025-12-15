@@ -1284,6 +1284,25 @@ html {
     }
 }
 
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    @keyframes iconPulse {
+        0%, 100% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1);
+        }
+    }
+    
+    .modern-card,
+    .modern-contact-item,
+    .modern-payment,
+    .modern-submit-btn {
+        transition: none;
+    }
+}
+
 .card-header-modern h4 {
     font-weight: 700;
     color: var(--dark-color);
