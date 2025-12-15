@@ -15,7 +15,14 @@ A modern, responsive, and feature-rich business website for showcasing AI-assist
 ### Unique Features
 1. **Project Cost Estimator**: Interactive tool for real-time project cost calculation
 2. **AI Recommendation System**: Smart assistant to suggest the best package based on business needs
-3. **Chatbot Widget**: AI-powered demo chatbot for instant assistance
+3. **Enhanced AI Chatbot Widget**: Powerful conversational AI with advanced features
+   - Session memory and context awareness
+   - Multi-language support (English + 6 Indian languages)
+   - Voice interaction (speech-to-text)
+   - File upload capability
+   - Project cost estimation
+   - Quick reply buttons
+   - Typing indicators
 4. **Business Metrics Counters**: Animated counters showing 150+ projects, 5-day turnaround
 5. **Scroll Animations**: Smooth AOS animations throughout the site
 6. **Responsive Design**: Fully optimized for desktop, tablet, and mobile devices
@@ -34,12 +41,14 @@ A modern, responsive, and feature-rich business website for showcasing AI-assist
 Business-website/
 ├── index.html          # Main HTML file
 ├── css/
-│   └── style.css      # Custom styles
+│   └── style.css      # Custom styles (including chatbot UI)
 ├── js/
-│   └── script.js      # Interactive functionality
-├── images/            # Image assets (if needed)
-├── assets/            # Additional assets
-└── Readme            # Project documentation
+│   ├── script.js      # General website functionality
+│   ├── chatbot.js     # Enhanced AI chatbot logic
+│   └── api-integration.js  # Backend API communication
+├── server-reference.js # Sample Node.js backend (reference)
+├── CHATBOT_README.md  # Detailed chatbot documentation
+└── Readme             # Project documentation
 ```
 
 ## 🎨 Design Highlights
@@ -100,17 +109,26 @@ Simply edit the files and refresh your browser:
 
 ## ✨ Key Interactive Features
 
+### Enhanced AI Chatbot
+- **Conversational Intelligence**: Context-aware responses
+- **Session Memory**: Remembers user preferences and conversation history
+- **Multi-Language Support**: English + 6 Indian languages (Hindi, Marathi, Gujarati, Tamil, Telugu, Bengali)
+- **Voice Interaction**: Speech-to-text for voice commands
+- **File Upload**: Share designs/wireframes during chat
+- **Project Estimation**: Interactive cost calculation
+- **Quick Replies**: One-click common queries
+- **Typing Indicators**: Real-time response feedback
+
 ### Cost Estimator
 - Real-time price calculation
 - Project type selection
 - Feature add-ons
 - Timeline multiplier
 
-### AI Chatbot
-- Predefined responses
-- Service information
-- Contact assistance
-- 24/7 availability simulation
+### AI Recommendation System
+- Business type analysis
+- Goal-based package suggestions
+- Feature recommendations
 
 ### Contact Form
 - Email validation
