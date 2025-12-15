@@ -260,7 +260,7 @@ const contactEmail = document.getElementById('contactMessage');
 const contactMessage = document.getElementById('contactMessage');
 
 // Configuration constants
-const CONTACT_EMAIL = 'aryaman@gmail.com';
+const CONTACT_EMAIL = 'aryamaninbox@gmail.com';
 const NAME_VALIDATION_PATTERN = /^[a-zA-Z\s]+$/;
 const MIN_NAME_LENGTH = 2;
 const MAX_NAME_LENGTH = 100;
