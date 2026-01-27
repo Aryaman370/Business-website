@@ -100,7 +100,7 @@ If you don't configure an email service, the form will still work and log submis
    - **Email**: Valid email format (live validation)
    - **Message**: At least 10 characters
 4. Click "Send Inquiry"
-5. Check your email at `aryaman@gmail.com`
+5. Check your email at `aryamaninbox@gmail.com`
 
 ## Form Validation Rules
 
@@ -246,7 +246,7 @@ If you prefer not to run a backend server:
 
 ### Change Recipient Email
 
-Edit `server.js` and change `aryaman@gmail.com` to your desired email address in:
+Edit `server.js` and change `aryamaninbox@gmail.com` to your desired email address in:
 - Line 154 (Nodemailer)
 - Line 168 (SendGrid)
 - Line 183 (Mailgun)
@@ -270,7 +270,7 @@ const MAX_REQUESTS_PER_WINDOW = 3; // requests
 ## Support
 
 For issues or questions:
-- Email: aryaman@gmail.com
+- Email: aryamaninbox@gmail.com
 - Check server logs: `npm start` output
 - Review browser console for frontend errors
 
